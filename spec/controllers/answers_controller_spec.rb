@@ -47,7 +47,7 @@ describe AnswersController do
 
     context 'with valid attributes' do
       it 'does save the new answer for question' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(answers, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -57,12 +57,14 @@ describe AnswersController do
     end
 
     context 'with invalid attributes' do
+      let(:empty_question) { create(:question) }
+
       it 'does not save the new answer for question' do
-        expect{ post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) } }.to_not change(answers, :count)
+        expect { post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer) } }.to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) }
+        post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer) }
         expect(response).to render_template :new
       end
     end
