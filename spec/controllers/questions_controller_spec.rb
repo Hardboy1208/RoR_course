@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 describe QuestionsController do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question, 2, user: user) }
 
     before { get :index }
 
@@ -30,6 +31,8 @@ describe QuestionsController do
   end
 
   describe 'GET #new' do
+    sign_in_user
+
     before { get :new }
 
     it 'assign a new Question to @question' do
@@ -42,25 +45,52 @@ describe QuestionsController do
   end
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'when valid attributes' do
       it 'saves the new question in the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+        expect { post :create, params: { question: attributes_for(:question, user_id: @user.id) } }.to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do
-        post :create, params: { question: attributes_for(:question) }
+        post :create, params: { question: attributes_for(:question, user_id: @user.id) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
     context 'when invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:invalid_question, user_id: @user.id) } }.to_not change(Question, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
+        post :create, params: { question: attributes_for(:invalid_question, user_id: @user.id) }
         expect(response).to render_template :new
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+
+    let(:question_with_author) { create(:question, user: @user) }
+
+    context 'Author deleting question' do
+      it 'should delete author`s question' do
+        question_with_author
+        expect { delete :destroy, params: { id: question_with_author } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to question index view' do
+        delete :destroy, params: { id: question_with_author }
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'Non-author deleting question' do
+      it 'question destroy' do
+        question
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
     end
   end

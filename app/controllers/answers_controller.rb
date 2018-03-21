@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_question
-  before_action :set_answer, only: [:show]
+  before_action :set_answer, only: [:show, :destroy]
 
   def index
     @answers = @question.answers
@@ -13,13 +13,23 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     if @answer.save
-      redirect_to question_answers_path @question
+      flash[:notice] = 'Your answer successfully created.'
+      redirect_to @question
     else
       render :new
     end
   end
 
   def show; end
+
+  def destroy
+    if @answer.destroy
+      flash[:notice] = 'Your answer successfully deleted.'
+      redirect_to @question
+    else
+      flash[:notice] = 'Your answer successfully deleted.'
+    end
+  end
 
   private
 
@@ -32,6 +42,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :question_id, :user_id)
   end
 end
