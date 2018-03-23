@@ -46,9 +46,7 @@ describe AnswersController do
 
     context 'Author deleting answer' do
       it 'the number of answers was less' do
-        p question_with_answer.answers
         expect { delete :destroy, params: { question_id: question, id: question_with_answer.answers.first.id } }.to change(question_with_answer.answers, :count).by(-1)
-        p question_with_answer.answers
       end
 
       it 'redirects to question show view' do

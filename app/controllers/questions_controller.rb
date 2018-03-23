@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :destroy]
+  before_action :user_is_author?, only: [:destroy]
 
   def index
     @questions = Question.all
@@ -25,21 +26,23 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      if @question.destroy
-        flash[:notice] = 'Your question successfully deleted.'
-        redirect_to root_path
-      else
-        flash[:danger] = 'Your question not deleted.'
-        redirect_to @question
-      end
+    if @question.destroy
+      flash[:notice] = 'Your question successfully deleted.'
+      redirect_to root_path
     else
-      flash[:danger] = 'You not author question.'
+      flash[:danger] = 'Your question not deleted.'
       redirect_to @question
     end
   end
 
   private
+
+  def user_is_author?
+    unless current_user.author_of?(@question)
+      flash[:danger] = 'You not author question.'
+      redirect_to @question
+    end
+  end
 
   def load_question
     @question = Question.find(params[:id])

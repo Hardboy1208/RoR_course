@@ -1,9 +1,4 @@
-- if @question.errors.any?
-  .alert.alert-danger
-    %h5= 'Ошибки:'
-    %ul
-      - @question.errors.full_messages.each do |message|
-        %li= message
+= render 'shared/errors', object: @question
 
 = form_for @question do |f|
   = f.label :title
