@@ -8,14 +8,12 @@ feature 'Create answer for question', %q{
 
   given(:user) { create(:user) }
 
-  given(:question) { create(:question) }
-
-  background { question }
+  given!(:question) { create(:question) }
 
   scenario 'Authenticated user creates answer' do
     sign_in(user)
 
-    visit question_path(question.id)
+    visit question_path(question)
 
     fill_in 'Body', with: 'test answer text for question'
     click_on 'Add answer'
@@ -23,9 +21,19 @@ feature 'Create answer for question', %q{
     expect(page).to have_content 'test answer text for question'
   end
 
+  scenario 'Authenticated user creates not valid answer' do
+    sign_in(user)
+
+    visit question_path(question)
+
+    click_on 'Add answer'
+    expect(page).to_not have_content 'Your answer successfully created.'
+    expect(page).to have_content "Body can't be blank"
+  end
+
   scenario 'Non-authenticated user not create answer' do
     visit question_path(question.id)
-    expect(page.has_content?('Add answer')).to eq false
-    expect(page.has_content?('Body')).to eq false
+    expect(page).to_not have_content 'Add answer'
+    expect(page).to_not have_content 'Body'
   end
 end

@@ -17,7 +17,10 @@ feature 'Show question', %q{
 
     expect(page).to have_content question_with_answer.title
     expect(page).to have_content question_with_answer.body
-    expect(page).to have_content question_with_answer.answers.first.body
+
+    question_with_answer.answers.each do |answer|
+      expect(page).to have_content answer.body
+    end
   end
 
   scenario 'Non-authenticated user see question' do
@@ -25,6 +28,8 @@ feature 'Show question', %q{
 
     expect(page).to have_content question_with_answer.title
     expect(page).to have_content question_with_answer.body
-    expect(page).to have_content question_with_answer.answers.first.body
+    question_with_answer.answers.each do |answer|
+      expect(page).to have_content answer.body
+    end
   end
 end

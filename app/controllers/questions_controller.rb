@@ -7,8 +7,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answers = Answer.all
-    @answer  = Answer.new
+    @answer = Answer.new
   end
 
   def new
@@ -16,8 +15,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(questions_params)
-
+    @question = current_user.questions.new(questions_params)
     if @question.save
       flash[:notice] = 'Your question successfully created.'
       redirect_to @question
@@ -27,7 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if @question.user == current_user
+    if current_user.author_of?(@question)
       if @question.destroy
         flash[:notice] = 'Your question successfully deleted.'
         redirect_to root_path
@@ -35,6 +33,9 @@ class QuestionsController < ApplicationController
         flash[:danger] = 'Your question not deleted.'
         redirect_to @question
       end
+    else
+      flash[:danger] = 'You not author question.'
+      redirect_to @question
     end
   end
 
@@ -45,6 +46,6 @@ class QuestionsController < ApplicationController
   end
 
   def questions_params
-    params.require(:question).permit(:title, :body, :user_id)
+    params.require(:question).permit(:title, :body)
   end
 end

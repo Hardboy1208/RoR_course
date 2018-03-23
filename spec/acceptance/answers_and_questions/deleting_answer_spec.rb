@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Delete question and answer', %q{
+feature 'Delete answer', %q{
   In order to get answer from community
   As an authenticated user
   I want to be able to ask question
@@ -10,34 +10,28 @@ feature 'Delete question and answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question_for_answers) }
 
-  scenario 'Author delete question' do
+  scenario 'Author delete answer' do
+    answer_body = user_with_question_and_answers.questions.first.answers.first.body
+
     sign_in(user_with_question_and_answers)
 
-    visit questions_path
+    visit question_path(user_with_question_and_answers.questions.first)
+    expect(page).to have_content answer_body
     click_on 'Delete'
 
-    expect(page).to have_content 'Your question successfully deleted.'
+    expect(page).to have_content 'Your answer successfully deleted.'
+    expect(page).to_not have_content answer_body
   end
 
-  scenario 'Non-author delete question' do
+  scenario 'Non-author delete answer' do
     question
     sign_in(user)
     visit question_path(question)
     expect(page).to_not have_content 'Delete'
   end
 
-  scenario 'Author delete answer' do
-    sign_in(user_with_question_and_answers)
-
-    visit question_path(user_with_question_and_answers.questions.first)
-    click_on 'Delete'
-
-    expect(page).to have_content 'Your answer successfully deleted.'
-  end
-
-  scenario 'Non-author delete answer' do
+  scenario 'Non-authenticated delete answer' do
     question
-    sign_in(user)
     visit question_path(question)
     expect(page).to_not have_content 'Delete'
   end
