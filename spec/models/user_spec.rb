@@ -11,19 +11,11 @@ RSpec.describe User do
     let(:question) { create(:question_for_answers) }
 
     it 'User the author of his question' do
-      expect(user.author_of?(user.questions.first)).to be_truthy
+      expect(user).to be_author_of(user.questions.first)
     end
 
     it 'User not the author of alien question' do
       expect(user.author_of?(question)).to be_falsey
-    end
-
-    it 'User the author of his answer' do
-      expect(user.author_of?(user.questions.first.answers.first)).to be_truthy
-    end
-
-    it 'User not the author of alien answer' do
-      expect(user.author_of?(question.answers.first)).to be_falsey
     end
   end
 end
