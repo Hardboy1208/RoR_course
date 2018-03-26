@@ -1,5 +1,5 @@
 <% unless @answer.body.empty? %>
-  $('.answers').append('<%= j render 'questions/answers', answer: @answer %>')
+  $('.answers').append('<%= j render @answer %>')
 <% end %>
 
 $('.errors').html('<%= j render 'shared/errors', object: @answer %>')
