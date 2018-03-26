@@ -10,7 +10,7 @@ feature 'Create answer for question', %q{
 
   given!(:question) { create(:question) }
 
-  scenario 'Authenticated user creates answer' do
+  scenario 'Authenticated user creates answer', js: true do
     sign_in(user)
 
     visit question_path(question)
@@ -18,10 +18,13 @@ feature 'Create answer for question', %q{
     fill_in 'Body', with: 'test answer text for question'
     click_on 'Add answer'
     expect(page).to have_content 'Your answer successfully created.'
-    expect(page).to have_content 'test answer text for question'
+
+    within '.answers' do
+      expect(page).to have_content 'test answer text for question'
+    end
   end
 
-  scenario 'Authenticated user creates not valid answer' do
+  scenario 'Authenticated user creates not valid answer', js: true do
     sign_in(user)
 
     visit question_path(question)

@@ -1,0 +1,7 @@
+<% unless @answer.body.empty? %>
+  $('.answers').append('<%= j render 'questions/answers', answer: @answer %>')
+<% end %>
+
+$('.errors').html('<%= j render 'shared/errors', object: @answer %>')
+$('.flash').html('<%= j render 'shared/notice' %>')
+$('#answer_body').val('')

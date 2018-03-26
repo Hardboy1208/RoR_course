@@ -11,17 +11,17 @@ describe AnswersController do
 
     context 'with valid attributes' do
       it 'does save the new answer for question' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(answers, :count).by(1)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js } }.to change(answers, :count).by(1)
       end
 
       it 'the answer belongs to the user' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
         expect(assigns(:answer).user_id).to eq @user.id
       end
 
       it 'redirects to show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(response).to redirect_to assigns(:question)
+        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
+        expect(response).to render_template :create
       end
     end
 
@@ -29,12 +29,12 @@ describe AnswersController do
       let(:empty_question) { create(:question, user: user) }
 
       it 'does not save the new answer for question' do
-        expect { post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer) } }.to_not change(Answer, :count)
+        expect { post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer), format: :js } }.to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer) }
-        expect(response).to render_template 'questions/show'
+        post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer), format: :js }
+        expect(response).to render_template :create
       end
     end
   end

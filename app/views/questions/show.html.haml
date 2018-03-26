@@ -2,17 +2,15 @@
 %h5= @question.body
 %hr
 %h3= 'All answer:'
-- @question.answers.each do |answer|
-  = answer.body
-  - if user_signed_in? && current_user.author_of?(answer)
-    = link_to 'Delete', question_answer_path(@question, answer), method: :delete
-  %br
+.answers
+  - @question.answers.each do |answer|
+    = render 'answers', answer: answer
 %hr
 %h3= 'Your answer to the question:'
 -if user_signed_in?
-  = render 'shared/errors', object: @answer
+  .errors
 
-  = form_for [@question, @answer] do |f|
+  = form_for [@question, @answer], remote: true do |f|
     = f.label :body
     = f.text_area :body
     = f.submit 'Add answer'
