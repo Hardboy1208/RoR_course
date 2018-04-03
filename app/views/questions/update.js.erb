@@ -1,0 +1,6 @@
+<% unless @question.body.empty? &&  @question.title.empty? %>
+  $('.question').html('<%= j render @question %>')
+<% end %>
+
+$('.flash').html('<%= j render 'shared/notice' %>')
+$('#edit-question').prepend('<%= j render 'shared/errors', object: @question %>')

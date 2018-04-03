@@ -1,0 +1,5 @@
+<% unless @answer.body.empty? %>
+  $('.answer-' + <%= @answer.id %>).remove()
+<% end %>
+
+$('.flash').html('<%= j render 'shared/notice' %>')

@@ -1,0 +1,4 @@
+%h1= @question.title
+%h5= @question.body
+- if user_signed_in? && current_user.author_of?(@question)
+  = link_to 'Edit', edit_question_path(@question), remote: true, class: 'edit-question-link'

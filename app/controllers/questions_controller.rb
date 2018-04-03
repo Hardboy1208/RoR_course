@@ -1,10 +1,10 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :user_is_author?, only: [:destroy]
 
   def index
-    @questions = Question.all
+    @questions = Question.all.order('id')
   end
 
   def show
@@ -22,6 +22,18 @@ class QuestionsController < ApplicationController
       redirect_to @question
     else
       render :new
+    end
+  end
+
+  def edit
+    if current_user.author_of?(@question)
+      render :edit
+    end
+  end
+
+  def update
+    if current_user.author_of?(@question)
+      @question.update(questions_params)
     end
   end
 

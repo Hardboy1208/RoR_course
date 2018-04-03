@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Delete answer', %q{
   In order to get answer from community
@@ -10,7 +10,7 @@ feature 'Delete answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question_for_answers) }
 
-  scenario 'Author delete answer' do
+  scenario 'Author delete answer', js: true do
     answer_body = user_with_question_and_answers.questions.first.answers.first.body
 
     sign_in(user_with_question_and_answers)

@@ -34,8 +34,30 @@ describe AnswersController do
 
       it 're-renders new view' do
         post :create, params: { question_id: empty_question, answer: attributes_for(:invalid_answer), format: :js }
-        expect(response).to render_template :create
+        expect(response).to render_template :create;
       end
+    end
+  end
+
+  describe 'PATCH #update' do
+    sign_in_user
+
+    let(:question_with_answer) { create(:question_for_answers, user: @user) }
+
+    it 'assings the requested answer to @answer' do
+      patch :update, params: { id: question_with_answer.answers.first, question_id: question_with_answer, answer: attributes_for(:answer), format: :js }
+      expect(assigns(:answer)).to eq question_with_answer.answers.first
+    end
+
+    it 'changes answer attributes' do
+      patch :update, params: { id: question_with_answer.answers.first, question_id: question_with_answer, answer: { body: 'new body' }, format: :js }
+      question_with_answer.answers.first.reload
+      expect(question_with_answer.answers.first.body).to eq 'new body'
+    end
+
+    it 'render update template' do
+      patch :update, params: { id: question_with_answer.answers.first, question_id: question_with_answer, answer: attributes_for(:answer), format: :js }
+      expect(response).to render_template :update
     end
   end
 
@@ -46,23 +68,37 @@ describe AnswersController do
 
     context 'Author deleting answer' do
       it 'the number of answers was less' do
-        expect { delete :destroy, params: { question_id: question, id: question_with_answer.answers.first.id } }.to change(question_with_answer.answers, :count).by(-1)
+        expect { delete :destroy, params: { question_id: question, id: question_with_answer.answers.first.id, format: :js } }.to change(question_with_answer.answers, :count).by(-1)
       end
 
       it 'redirects to question show view' do
-        delete :destroy, params: { question_id: question_with_answer, id: question_with_answer.answers.first.id }
-        expect(response).to redirect_to question_path(question_with_answer)
+        delete :destroy, params: { question_id: question_with_answer, id: question_with_answer.answers.first.id, format: :js }
+        expect(response).to render_template :destroy
       end
     end
 
     context 'another user can delete answer' do
       it 'should not delete user`s answer' do
-        expect { delete :destroy, params: { question_id: question.id, id: answer.id } }.to_not change(question.answers, :count)
+        expect { delete :destroy, params: { question_id: question.id, id: answer.id, format: :js } }.to_not change(question.answers, :count)
       end
 
       it 'redirects to question show view' do
-        delete :destroy, params: { question_id: question.id, id: answer.id }
-        expect(response).to redirect_to question_path(question)
+        delete :destroy, params: { question_id: question.id, id: answer.id, format: :js }
+        expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'PATCH #choose_the_best' do
+    sign_in_user
+
+    let(:question_with_answer) { create(:question_with_five_answers, user: @user) }
+
+    context 'Author choose the best answer' do
+      it 'the number best of answers ' do
+        patch :choose_the_best, params: { id: question_with_answer.answers.first.id, format: :js }
+        question_with_answer.answers.first.reload
+        expect(question_with_answer.answers.first.best).to eq true
       end
     end
   end

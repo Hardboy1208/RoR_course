@@ -1,3 +1,11 @@
 // Place all the styles related to the Answers controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.edit_answer { display: none; }
+
+.best {
+  font-size: 2.1875em;
+  background: #aaffaa;
+  font-weight: 300;
+}

@@ -17,5 +17,15 @@ FactoryBot.define do
        create(:question_for_answers, user: user)
      end
     end
+
+    factory :user_with_question_and_five_answers do
+      transient do
+        question_count 1
+      end
+
+      after(:create) do |user|
+        create(:question_with_five_answers, user: user)
+      end
+    end
   end
 end

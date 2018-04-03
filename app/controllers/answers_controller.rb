@@ -1,8 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question
-  before_action :set_answer, only: [:show, :destroy]
-  before_action :user_is_author?, only: [:destroy]
+  before_action :set_question, except: [:choose_the_best]
+  before_action :set_answer, only: [:update, :destroy, :choose_the_best]
 
   def create
     @answer = current_user.answers.new(answer_params.merge({ question: @question }))
@@ -10,24 +9,27 @@ class AnswersController < ApplicationController
     flash[:notice] = @answer.save ? 'Your answer successfully created.' : 'Your answer not created.'
   end
 
+  def update
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+    end
+  end
+
   def destroy
-    if @answer.destroy
-      flash[:notice] = 'Your answer successfully deleted.'
-      redirect_to @question
-    else
-      flash[:notice] = 'Your answer successfully deleted.'
-      render "questions/show"
+    if current_user.author_of?(@answer)
+      flash[:notice] = @answer.destroy ? 'Your answer successfully deleted.' : 'Your answer not deleted.'
+    end
+  end
+
+  def choose_the_best
+    @question = @answer.question
+    if current_user.author_of?(@answer.question)
+      Answer.where(question_id: @answer.question).update_all(best: nil)
+      @answer.update(best: true)
     end
   end
 
   private
-
-  def user_is_author?
-    unless current_user.author_of?(@answer)
-      flash[:danger] = 'You not author question.'
-      redirect_to @question
-    end
-  end
 
   def set_answer
     @answer = Answer.find(params[:id])
