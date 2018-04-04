@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
   before_action :user_is_author?, only: [:destroy]
 
   def index
-    @questions = Question.all.order('id')
+    @questions = Question.all
   end
 
   def show

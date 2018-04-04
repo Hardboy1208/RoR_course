@@ -2,7 +2,7 @@
   = answer.body
 
   - if user_signed_in? && current_user.author_of?(@question) && answer.best.nil?
-    = link_to 'Choose as the best', "/choose_the_best/#{answer.id}", method: :patch, remote: true, class: 'choose-answer-link', data: { answer_id: answer.id }
+    = link_to 'Choose as the best', choose_the_best_question_answer_path(@question), method: :patch, remote: true, class: 'choose-answer-link'
 
   - if user_signed_in? && current_user.author_of?(answer)
     = link_to 'Delete', question_answer_path(@question, answer), method: :delete, remote: true

@@ -96,7 +96,7 @@ describe AnswersController do
 
     context 'Author choose the best answer' do
       it 'the number best of answers ' do
-        patch :choose_the_best, params: { id: question_with_answer.answers.first.id, format: :js }
+        patch :choose_the_best, params: { question_id: question_with_answer.id, id: question_with_answer.answers.first.id, format: :js }
         question_with_answer.answers.first.reload
         expect(question_with_answer.answers.first.best).to eq true
       end

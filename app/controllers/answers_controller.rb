@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, except: [:choose_the_best]
+  before_action :set_question
   before_action :set_answer, only: [:update, :destroy, :choose_the_best]
 
   def create
@@ -22,10 +22,8 @@ class AnswersController < ApplicationController
   end
 
   def choose_the_best
-    @question = @answer.question
-    if current_user.author_of?(@answer.question)
-      Answer.where(question_id: @answer.question).update_all(best: nil)
-      @answer.update(best: true)
+    if current_user.author_of?(@question)
+      @answer.choose_the_best
     end
   end
 
