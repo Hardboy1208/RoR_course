@@ -37,6 +37,9 @@ gem 'devise'
 gem 'launchy'
 gem 'jquery-rails'
 gem 'database_cleaner'
+gem 'carrierwave'
+gem 'remotipart'
+gem 'cocoon'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

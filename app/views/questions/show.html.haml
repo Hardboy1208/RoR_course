@@ -13,4 +13,9 @@
   = form_for [@question, @answer], remote: true do |f|
     = f.label :body
     = f.text_area :body
+    #attachments
+    = f.fields_for :attachments do |a|
+      = render 'attachment_fields', f: a
+    .links
+      = link_to_add_association "Add attachment", f, :attachments
     = f.submit 'Add answer'

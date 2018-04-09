@@ -1,4 +1,12 @@
 %h1= @question.title
 %h5= @question.body
+%p Attachments:
+%ul
+  - @question.attachments.each do |a|
+    %li
+      = link_to a.file.identifier, a.file.url
+      - if user_signed_in? && current_user.author_of?(@question)
+        = link_to 'delete attachment', attachment_path(a), method: :delete
+
 - if user_signed_in? && current_user.author_of?(@question)
   = link_to 'Edit', edit_question_path(@question), remote: true, class: 'edit-question-link'

@@ -1,5 +1,13 @@
 %div{ class: !answer.best ? "answer-#{answer.id}" : "answer-#{answer.id} best" }
   = answer.body
+  %p Attachments:
+  %ul
+    - answer.attachments.each do |attach|
+      %li
+        = link_to attach.file.identifier, attach.file.url
+        - if user_signed_in? && current_user.author_of?(answer)
+          = link_to 'delete attachment', attachment_path(attach), method: :delete
+
 
   - if user_signed_in? && current_user.author_of?(@question) && !answer.best
     = link_to 'Choose as the best', choose_the_best_question_answer_path(@question, answer), method: :patch, remote: true, class: 'choose-answer-link'
@@ -12,5 +20,5 @@
       = f.label :body, "Answer"
       = f.text_area :body
       = f.submit 'Save'
-
   %br
+  %hr
