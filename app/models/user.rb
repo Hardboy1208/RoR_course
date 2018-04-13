@@ -10,4 +10,8 @@ class User < ApplicationRecord
   def author_of?(object)
     object.user_id == self.id
   end
+
+  def already_voted?(object)
+    object.ratings.where(user_id: self).empty? ? false : true
+  end
 end

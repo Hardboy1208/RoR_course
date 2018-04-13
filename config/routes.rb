@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :questions do
-    resources :answers do
+
+  concern :retractable do
+    member do
+      patch 'rating_up'
+      patch 'rating_down'
+      patch 'rating_reset'
+    end
+  end
+
+  resources :questions, concerns: :retractable do
+    resources :answers, concerns: :retractable do
       patch 'choose_the_best', on: :member
     end
   end

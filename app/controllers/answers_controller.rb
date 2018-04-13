@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Retracted
+
   before_action :authenticate_user!
   before_action :set_question
   before_action :set_answer, only: [:update, :destroy, :choose_the_best]

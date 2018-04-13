@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  include Retractable
+
   has_many :answers, dependent: :destroy
   has_many :attachments, as: :attachmentable
   belongs_to :user
