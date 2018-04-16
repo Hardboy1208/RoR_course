@@ -6,25 +6,38 @@ module Retracted
   end
 
   def rating_up
-    if !current_user.author_of?(@retractable) && !current_user.already_voted?(@retractable)
-      if @retractable.ratings.create(user_id: current_user.id, like: true)
-        redirect_to question_path(@retractable)
+    respond_to do |format|
+      if !current_user.author_of?(@retractable) && !current_user.already_voted?(@retractable)
+        if @retractable.ratings.create(user_id: current_user.id, like: 1)
+          format.json { render json: { retractable_id: @retractable.id, voted: true, diff_like: @retractable.diff_like, message: 'The vote was successful' } }
+        end
+      else
+        format.json { render json: { retractable_id: @retractable.id, voted: false, diff_like: @retractable.diff_like, message: 'The vote was unsuccessful' }, status: :unprocessible_entity }
       end
     end
   end
 
   def rating_down
-    if !current_user.author_of?(@retractable) && !current_user.already_voted?(@retractable)
-      if @retractable.ratings.create(user_id: current_user.id, like: false)
-        redirect_to question_path(@retractable)
+    respond_to do |format|
+      if !current_user.author_of?(@retractable) && !current_user.already_voted?(@retractable)
+        if @retractable.ratings.create(user_id: current_user.id, like: -1)
+          format.json { render json: { retractable_id: @retractable.id, voted: true, diff_like: @retractable.diff_like, message: 'The vote was successful' } }
+        end
+      else
+        format.json { render json: { retractable_id: @retractable.id, voted: false, diff_like: @retractable.diff_like, message: 'The vote was unsuccessful' }, status: :unprocessible_entity }
       end
     end
   end
 
   def rating_reset
-    if !current_user.author_of?(@retractable) && current_user.already_voted?(@retractable)
-      @retractable.ratings.find_by(user_id: current_user.id).destroy
-      redirect_to question_path(@retractable)
+    respond_to do |format|
+      if current_user.already_voted?(@retractable)
+        if @retractable.ratings.find_by(user_id: current_user.id).destroy
+          format.json { render json: { retractable_id: @retractable.id, voted: false, diff_like: @retractable.diff_like, message: 'The voice is dropped' } }
+        end
+      else
+        format.json { render json: { retractable_id: @retractable.id, voted: true, diff_like: @retractable.diff_like, message: 'the voice is not dropped' }, status: :unprocessible_entity }
+      end
     end
   end
 

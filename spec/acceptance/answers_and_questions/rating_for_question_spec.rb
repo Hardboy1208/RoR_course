@@ -5,10 +5,9 @@ feature 'Add rating to question', %q{
 } do
   given(:author) { create(:user) }
   given(:non_author) { create(:user) }
-  given(:question) { create(:question, user: author) }
+  given!(:question) { create(:question, user: author) }
 
   scenario 'The author can not vote for his question' do
-    question
     sign_in(author)
     visit questions_path
 
@@ -18,8 +17,6 @@ feature 'Add rating to question', %q{
   end
 
   scenario 'unauthorized user can not vote for his question' do
-    question
-    sign_in(author)
     visit questions_path
 
     expect(page).to_not have_link '+1'
@@ -27,8 +24,7 @@ feature 'Add rating to question', %q{
     expect(page).to_not have_link '(0)'
   end
 
-  scenario 'The author can vote for his question' do
-    question
+  scenario 'Not the author can vote for his question', js: true do
     sign_in(non_author)
     visit questions_path
 

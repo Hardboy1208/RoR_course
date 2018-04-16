@@ -6,14 +6,14 @@ module Retractable
   end
 
   def all_likes
-    self.ratings.where(like: true).count
+    self.ratings.where(like: 1).count
   end
 
   def all_dislikes
-    self.ratings.where(like: false).count
+    self.ratings.where(like: -1).count
   end
 
   def diff_like
-    self.all_likes - self.all_dislikes
+    self.ratings.sum(:like)
   end
 end

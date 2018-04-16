@@ -4,7 +4,7 @@ class CreateRatings < ActiveRecord::Migration[5.1]
       t.string :retractable_type
       t.integer :retractable_id
       t.integer :user_id
-      t.boolean :like
+      t.integer :like
 
       t.timestamps
     end

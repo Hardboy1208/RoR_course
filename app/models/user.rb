@@ -12,6 +12,6 @@ class User < ApplicationRecord
   end
 
   def already_voted?(object)
-    object.ratings.where(user_id: self).empty? ? false : true
+    object.ratings.exists?(user_id: self)
   end
 end

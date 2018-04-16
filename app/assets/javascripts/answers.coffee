@@ -7,3 +7,8 @@ $ ->
     $(this).hide();
     answer_id = $(this).data('answerId');
     $('form#edit-answer-' + answer_id).show();
+
+  $('a.rating-link').bind 'ajax:success', (e) ->
+    question_id = $(this).data('questionId')
+    vote = e.detail[0]
+    $('.vote-' + question_id).html('<p>' + vote.positive_count + ' (' + vote.positive_persent + '%) ' + ' / ' + vote.negative_count + ' (' + vote.negative_persent + '%) ' + ' | ' + vote.result + '</p>')
