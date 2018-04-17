@@ -28,4 +28,14 @@ RSpec.describe Answer, type: :model do
       expect(best_answer).to_not be_best
     end
   end
+
+  describe '#diff_like' do
+    let!(:author) { create(:user_with_question_and_five_answers) }
+    let!(:not_author) { create(:user) }
+
+    it 'Then see voted result on the answer' do
+      author.questions.first.answers.first.ratings.create(user_id: not_author.id, like: 1)
+      expect(author.questions.first.answers.first.diff_like).to eq 1
+    end
+  end
 end

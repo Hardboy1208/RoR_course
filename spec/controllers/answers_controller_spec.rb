@@ -102,4 +102,68 @@ describe AnswersController do
       end
     end
   end
+
+  describe 'rating' do
+    sign_in_user
+
+    let(:question_with_answer) { create(:question_for_answers, user: user) }
+    let(:author_question_with_answer) { create(:question_for_answers, user: @user) }
+
+    describe 'PATCH #rating_up' do
+      context 'Not author voted for answer' do
+        it 'the number rating of answers' do
+          patch :rating_up, params: { id: question_with_answer.answers.first.id, format: :json }
+          question_with_answer.answers.first.reload
+          expect(question_with_answer.answers.first.diff_like).to eq 1
+        end
+      end
+
+      context 'author voted for answer' do
+        it 'the number rating of answers' do
+          patch :rating_up, params: { id: author_question_with_answer.answers.first.id, format: :json }
+          author_question_with_answer.answers.first.reload
+          expect(author_question_with_answer.answers.first.diff_like).to eq 0
+        end
+      end
+    end
+
+    describe 'PATCH #rating_down' do
+      context 'Not author voted for answer' do
+        it 'the number rating of answers' do
+          patch :rating_down, params: { id: question_with_answer.answers.first.id, format: :json }
+          question_with_answer.answers.first.reload
+          expect(question_with_answer.answers.first.diff_like).to eq -1
+        end
+      end
+
+      context 'author voted for answer' do
+        it 'the number rating of answers' do
+          patch :rating_down, params: { id: author_question_with_answer.answers.first.id, format: :json }
+          author_question_with_answer.answers.first.reload
+          expect(author_question_with_answer.answers.first.diff_like).to eq 0
+        end
+      end
+    end
+
+    describe 'PATCH #rating_reset' do
+      context 'Not author voted for answer' do
+        it 'the number rating of answers' do
+          patch :rating_down, params: { id: question_with_answer.answers.first.id, format: :json }
+          question_with_answer.answers.first.reload
+          patch :rating_reset, params: { id: question_with_answer.answers.first.id, format: :json }
+          question_with_answer.answers.first.reload
+          expect(question_with_answer.answers.first.diff_like).to eq 0
+        end
+      end
+
+      context 'author voted for answer' do
+        it 'the number rating of answers' do
+          author_question_with_answer.answers.first.ratings.create(user_id: author_question_with_answer.id, like: 1)
+          patch :rating_reset, params: { id: author_question_with_answer.answers.first.id, format: :json }
+          author_question_with_answer.answers.first.reload
+          expect(author_question_with_answer.answers.first.diff_like).to eq 1
+        end
+      end
+    end
+  end
 end

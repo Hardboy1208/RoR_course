@@ -19,3 +19,6 @@ rating_send = ->
     rating_send()
 $ ->
   rating_send()
+
+$(document).on 'turbolinks:load', ->
+  rating_send()

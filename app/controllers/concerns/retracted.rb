@@ -31,7 +31,7 @@ module Retracted
 
   def rating_reset
     respond_to do |format|
-      if current_user.already_voted?(@retractable)
+      if !@retractable.ratings.find_by(user_id: current_user.id).nil? && current_user.already_voted?(@retractable)
         if @retractable.ratings.find_by(user_id: current_user.id).destroy
           format.json { render json: { retractable_id: @retractable.id, voted: false, diff_like: @retractable.diff_like, message: 'The voice is dropped' } }
         end

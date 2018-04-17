@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   include Retracted
 
   before_action :authenticate_user!
-  before_action :set_question
+  before_action :set_question, only: [:create]
   before_action :set_answer, only: [:update, :destroy, :choose_the_best]
 
   def create
@@ -24,7 +24,7 @@ class AnswersController < ApplicationController
   end
 
   def choose_the_best
-    if current_user.author_of?(@question)
+    if current_user.author_of?(@answer.question)
       @answer.choose_the_best
     end
   end

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :retractable do
-    resources :answers, concerns: :retractable do
+    resources :answers, shallow: true, concerns: :retractable do
       patch 'choose_the_best', on: :member
     end
   end

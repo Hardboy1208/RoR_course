@@ -1,4 +1,4 @@
-$('.answers').html('<%= j render @question.answers.sorted %>')
+$('.answers').html('<%= j render @answer.question.answers.sorted %>')
 
 $('.edit-answer-link').click(function(e){
     $(this).hide();
