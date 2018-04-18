@@ -30,12 +30,10 @@ RSpec.describe Answer, type: :model do
   end
 
   describe '#diff_like' do
-    let!(:author) { create(:user_with_question_and_five_answers) }
-    let!(:not_author) { create(:user) }
+    let!(:answer) { create(:answer_with_ratings) }
 
     it 'Then see voted result on the answer' do
-      author.questions.first.answers.first.ratings.create(user_id: not_author.id, like: 1)
-      expect(author.questions.first.answers.first.diff_like).to eq 1
+      expect(answer.diff_like).to eq answer.ratings.sum(:like)
     end
   end
 end

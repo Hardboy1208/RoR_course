@@ -27,6 +27,16 @@ FactoryBot.define do
         create_list(:answer, evaluator.answers_count, question: question, user: question.user)
       end
     end
+
+    factory :question_with_ratings do
+      transient do
+        ratings_count 10
+      end
+
+      after(:create) do |question, evaluator|
+        create_list(:rating, evaluator.ratings_count, retractable: question, user_id: question.user.id, like: [-1, 1].sample)
+      end
+    end
   end
 
   factory :invalid_question, class: "Question" do
