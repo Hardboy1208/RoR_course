@@ -1,5 +1,5 @@
 <% unless @question.body.empty? &&  @question.title.empty? %>
-  $('.question').html('<%= j render @question %>')
+  $('.question-<%= @question.id %>').html('<%= j render @question %>')
 <% end %>
 
 $('.flash').html('<%= j render 'shared/notice' %>')

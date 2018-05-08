@@ -1,7 +1,10 @@
 class Question < ApplicationRecord
   include Retractable
 
+  scope :sorted, -> { order('created_at DESC') }
+
   has_many :answers, dependent: :destroy
+  has_many :comments, as: :commentable
   has_many :attachments, as: :attachmentable
   belongs_to :user
 

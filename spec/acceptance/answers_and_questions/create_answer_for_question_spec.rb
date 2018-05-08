@@ -14,9 +14,10 @@ feature 'Create answer for question', %q{
     sign_in(user)
 
     visit question_path(question)
-
-    fill_in 'Body', with: 'test answer text for question'
-    click_on 'Add answer'
+    within '.new_answer' do
+      fill_in 'Body', with: 'test answer text for question'
+      click_on 'Add answer'
+    end
     expect(page).to have_content 'Your answer successfully created.'
 
     within '.answers' do

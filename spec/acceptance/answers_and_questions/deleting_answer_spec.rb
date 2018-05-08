@@ -16,11 +16,15 @@ feature 'Delete answer', %q{
     sign_in(user_with_question_and_answers)
 
     visit question_path(user_with_question_and_answers.questions.first)
-    expect(page).to have_content answer_body
-    click_on 'Delete'
+
+    within '.answers' do
+      expect(page).to have_content answer_body
+      click_on 'Delete'
+
+      expect(page).to_not have_content answer_body
+    end
 
     expect(page).to have_content 'Your answer successfully deleted.'
-    expect(page).to_not have_content answer_body
   end
 
   scenario 'Non-author delete answer' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180410132927) do
+ActiveRecord::Schema.define(version: 20180503133955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,8 +31,18 @@ ActiveRecord::Schema.define(version: 20180410132927) do
     t.datetime "updated_at", null: false
     t.integer "attachmentable_id"
     t.string "attachmentable_type"
-    t.index ["attachmentable_id"], name: "index_attachments_on_attachmentable_id"
-    t.index ["attachmentable_type"], name: "index_attachments_on_attachmentable_type"
+    t.index ["attachmentable_id", "attachmentable_type"], name: "index_attachments_on_attachmentable_id_and_attachmentable_type"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "body"
+    t.integer "user_id"
+    t.string "commentable_type"
+    t.integer "commentable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_id"], name: "index_comments_on_commentable_id"
+    t.index ["commentable_type"], name: "index_comments_on_commentable_type"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -48,7 +58,7 @@ ActiveRecord::Schema.define(version: 20180410132927) do
     t.string "retractable_type"
     t.integer "retractable_id"
     t.integer "user_id"
-    t.boolean "like"
+    t.integer "like"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

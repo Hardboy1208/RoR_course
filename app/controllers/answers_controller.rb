@@ -5,6 +5,8 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:create]
   before_action :set_answer, only: [:update, :destroy, :choose_the_best]
 
+  after_action :publish_answer, only: [:create]
+
   def create
     @answer = current_user.answers.new(answer_params.merge({ question: @question }))
 
@@ -30,6 +32,15 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast(
+        'answers',
+        { author: current_user, answer: @answer }
+    )
+  end
 
   def set_answer
     @answer = Answer.find(params[:id])

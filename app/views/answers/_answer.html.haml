@@ -33,4 +33,14 @@
       = f.text_area :body
       = f.submit 'Save'
   %br
+
+  .answer-comments
+    = render answer.comments
+  - if user_signed_in?
+    .answer-comments-form
+      %p Создать комментарий к ответу:
+      = form_for [ answer, answer.comments.new ], remote: true do |f|
+        = f.label :body
+        = f.text_area :body
+        = f.submit 'Add comment'
   %hr

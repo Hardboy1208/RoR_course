@@ -38,7 +38,7 @@ feature 'Answer editing', %q{
         expect(page).to_not have_content author.questions.first
         expect(page).to have_content 'edited title question'
         expect(page).to have_content 'edited body question'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_css 'edit_answer'
       end
     end
   end

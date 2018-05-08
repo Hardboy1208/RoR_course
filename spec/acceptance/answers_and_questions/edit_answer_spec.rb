@@ -34,7 +34,7 @@ feature 'Answer editing', %q{
         click_on 'Save'
         expect(page).to_not have_content author.questions.first.answers.first
         expect(page).to have_content 'edited answer'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_css 'edit_answer'
       end
     end
   end

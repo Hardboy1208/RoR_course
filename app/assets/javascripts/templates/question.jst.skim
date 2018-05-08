@@ -1,0 +1,18 @@
+.question
+  div[class="question-#{@question.id}"]
+    h3
+      a href="/questions/#{@question.id}"
+        = @question.title
+    h5= @question.body
+    =@author_link(@author, @question)
+
+    p Attachments:
+    ul
+
+    .rating
+      .rating_message
+      .rating_links
+        =@rating_links(@author, @question)
+      .diff_like
+        = "(0)"
+    hr
