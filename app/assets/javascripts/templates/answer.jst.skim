@@ -2,28 +2,13 @@ div[class= "answer-#{@answer.id}"]
   = @answer.body
   p Attachments:
   ul
-    / - @answer.attachments.each do |attach|
-    /   li
-    /     = link_to attach.file.identifier, attach.file.url
-    /     - if user_signed_in? && current_user.author_of?(answer)
-    /       = link_to 'delete attachment', attachment_path(attach), method: :delete
-
 
   .rating
     .rating_message
     .rating_links
-      =@rating_links(@author, @answer)
+      = @rating_links(@answer)
     .diff_like
       = "(0)"
 
-  =@author_link(@author, @answer)
-  / - if user_signed_in? && current_user.author_of?(answer)
-  /   = link_to 'Delete', answer_path(answer), method: :delete, remote: true
-  /   = link_to 'Edit', '', remote: true, class: 'edit-answer-link', data: { answer_id: answer.id }
-  /
-  /   = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-  /     = f.label :body, "Answer"
-  /     = f.text_area :body
-  /     = f.submit 'Save'
   br
   hr

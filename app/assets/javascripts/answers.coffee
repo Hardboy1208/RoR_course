@@ -23,29 +23,23 @@ $ ->
 
 App.cable.subscriptions.create('AnswersChannel', {
   connected: ->
-    @perform 'follow'
+    pathArray = window.location.pathname.split('/');
+    @perform 'follow', question_id: pathArray[2]
 
   received: (data) ->
     pathArray = window.location.pathname.split('/');
     if parseInt(pathArray[2]) == data.answer.question_id
-      if gon.user.id != data.author.id
+      if gon.user.id != data.answer.user_id
         $('.answers').append (
           JST["templates/answer"]({
             answer: data.answer
-            author: data.author
-            author_link: (author, answer)->
-              if gon.user == author
-                @safe "<a data-remote='true' rel='nofollow' data-method='delete' href='/answers/#{answer.id}'>Delete</a> \
-                       <a class='edit-answer-link' data-answer-id='#{answer.id}' data-remote='true' href=''>Edit</a> \
-                       <form id='edit-answer-#{answer.id}' class='edit_answer' action='/answers/#{answer.id}' accept-charset='UTF-8' data-remote='true' method='post'><input name='utf8' type='hidden' value='✓'><input type='hidden' name='_method' value='patch'><label for='answer_body'>Answer</label> \
-                         <textarea name='answer[body]' id='answer_body'>112323</textarea> \
-                         <input type='submit' name='commit' value='Save' data-disable-with='Save'> \
-                       </form>"
-            rating_links: (author, answer) ->
-              if (gon.user != null && gon.user != author)
-                @safe "<a class='rating-link' data-remote='true' rel='nofollow' data-method='patch' href='/answers/#{answer.id}/rating_up'>+1</a> \
-                       <a class='rating-link' data-remote='true' rel='nofollow' data-method='patch' href='/answers/#{answer.id}/rating_down'>-1</a>"
+            rating_links: (answer) ->
+              @safe "<a class='rating-link' data-remote='true' rel='nofollow' data-method='patch' href='/answers/#{answer.id}/rating_up'>+1</a> \
+                     <a class='rating-link' data-remote='true' rel='nofollow' data-method='patch' href='/answers/#{answer.id}/rating_down'>-1</a>"
           })
         );
         rating_send()
+
+  disconnected: ->
+    @perform 'unfollow'
 })

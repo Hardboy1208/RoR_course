@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
     return if @comment.errors.any?
 
     ActionCable.server.broadcast(
-        'comments',
+        "comments-#{@comment.question.id}",
         { author: current_user, comment: @comment, question_id: @comment.question.id  }
     )
   end

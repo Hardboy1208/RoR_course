@@ -15,6 +15,5 @@ class ApplicationController < ActionController::Base
   def gon_init
     @user = current_user if current_user
     gon.user = @user
-    gon.qwerty = 12354
   end
 end

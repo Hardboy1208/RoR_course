@@ -37,8 +37,8 @@ class AnswersController < ApplicationController
     return if @answer.errors.any?
 
     ActionCable.server.broadcast(
-        'answers',
-        { author: current_user, answer: @answer }
+        "answers-#{@answer.question_id}",
+        { answer: @answer }
     )
   end
 
