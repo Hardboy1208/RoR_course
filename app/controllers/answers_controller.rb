@@ -7,21 +7,23 @@ class AnswersController < ApplicationController
 
   after_action :publish_answer, only: [:create]
 
-  def create
-    @answer = current_user.answers.new(answer_params.merge({ question: @question }))
+  respond_to :js
+  respond_to :json, only: :create
 
-    flash[:notice] = @answer.save ? 'Your answer successfully created.' : 'Your answer not created.'
+  def create
+    respond_with(@answer = current_user.answers.create(answer_params.merge({ question: @question })))
   end
 
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
+      respond_with @answer
     end
   end
 
   def destroy
     if current_user.author_of?(@answer)
-      flash[:notice] = @answer.destroy ? 'Your answer successfully deleted.' : 'Your answer not deleted.'
+      respond_with @answer.destroy
     end
   end
 

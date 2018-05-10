@@ -42,6 +42,7 @@ gem 'remotipart'
 gem 'cocoon'
 gem 'gon'
 gem 'skim'
+gem 'responders'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

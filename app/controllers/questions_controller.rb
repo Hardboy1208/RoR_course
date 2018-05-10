@@ -4,31 +4,24 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :user_is_author?, only: [:destroy]
+  before_action :build_answer, only: :show
 
   after_action :publish_question, only: [:create]
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = Answer.new
-    @answer.attachments.build
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def create
-    @question = current_user.questions.new(questions_params)
-    if @question.save
-      flash[:notice] = 'Your question successfully created.'
-      redirect_to @question
-    else
-      render :new
-    end
+    respond_with(@question = current_user.questions.create(questions_params))
   end
 
   def edit
@@ -40,17 +33,26 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(questions_params)
+      respond_with @question
     end
   end
 
   def destroy
-    if @question.destroy
-      flash[:notice] = 'Your question successfully deleted.'
-      redirect_to root_path
-    else
-      flash[:danger] = 'Your question not deleted.'
-      redirect_to @question
-    end
+    respond_with @question.destroy
+
+    # if @question.destroy
+    #   flash[:notice] = 'Your question successfully deleted.'
+    #   redirect_to root_path
+    # else
+    #   flash[:danger] = 'Your question not deleted.'
+    #   redirect_to @question
+    # end
+  end
+
+  private
+
+  def build_answer
+    @answer = Answer.new
   end
 
   private

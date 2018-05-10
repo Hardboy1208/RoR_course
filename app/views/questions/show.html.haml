@@ -14,7 +14,7 @@
     = f.label :body
     = f.text_area :body
     #attachments
-    = f.fields_for :attachments do |a|
+    = f.fields_for :attachments, @answer.attachments.build do |a|
       = render 'attachment_fields', f: a
     .links
       = link_to_add_association "Add attachment", f, :attachments
