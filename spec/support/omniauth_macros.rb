@@ -11,7 +11,7 @@ module OmniauthMacros
         }
     })
 
-    OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new({
+    OmniAuth.config.mock_auth[:vkontakte] = OmniAuth::AuthHash.new({
          provider: 'vkontakte',
          uid: '123545',
          info: {
