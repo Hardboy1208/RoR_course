@@ -6,7 +6,6 @@ module Retracted
   end
 
   def rating_up
-    authorize!(:read, @retractable)
     respond_to do |format|
       if !current_user.author_of?(@retractable) && !current_user.already_voted?(@retractable)
         if @retractable.ratings.create(user_id: current_user.id, like: 1)
@@ -19,7 +18,6 @@ module Retracted
   end
 
   def rating_down
-    authorize!(:rating_down, @retractable)
     respond_to do |format|
       if !current_user.author_of?(@retractable) && !current_user.already_voted?(@retractable)
         if @retractable.ratings.create(user_id: current_user.id, like: -1)
@@ -32,7 +30,6 @@ module Retracted
   end
 
   def rating_reset
-    authorize!(:rating_reset, @retractable)
     respond_to do |format|
       if !@retractable.ratings.find_by(user_id: current_user.id).nil? && current_user.already_voted?(@retractable)
         if @retractable.ratings.find_by(user_id: current_user.id).destroy
