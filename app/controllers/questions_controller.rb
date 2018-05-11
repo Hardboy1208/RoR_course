@@ -8,6 +8,8 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   def index
     respond_with(@questions = Question.all)
   end
@@ -39,14 +41,6 @@ class QuestionsController < ApplicationController
 
   def destroy
     respond_with @question.destroy
-
-    # if @question.destroy
-    #   flash[:notice] = 'Your question successfully deleted.'
-    #   redirect_to root_path
-    # else
-    #   flash[:danger] = 'Your question not deleted.'
-    #   redirect_to @question
-    # end
   end
 
   private
