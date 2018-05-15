@@ -1,22 +1,22 @@
 %div{ class: "question-#{question.id}" }
   %h3= link_to question.title, question
   %h5= question.body
-  - if can?(:destroy, Question) && current_user.author_of?(question)
+  - if can?(:destroy, question)
     = link_to 'Delete', question_path(question), method: :delete
-  - if can?(:update, Question) && current_user.author_of?(question)
+  - if can?(:update, question)
     = link_to 'Edit', edit_question_path(question), remote: true, class: 'edit-question-link'
   %p Attachments:
   %ul
     - question.attachments.each do |a|
       %li
         = link_to a.file.identifier, a.file.url
-        - if can?(:destroy, Question) && current_user.author_of?(question)
+        - if can?(:destroy, a)
           = link_to 'delete attachment', attachment_path(a), method: :delete
 
   .rating
     .rating_message
     .rating_links
-      - if can?(:rating_up, Answer) && can?(:rating_down, Answer) && !current_user.author_of?(question)
+      - if can?(:rating_up, question) && can?(:rating_down, question)
         - unless current_user.already_voted?(question)
           = link_to '+1', rating_up_question_path(question), method: :patch, remote: true, class: 'rating-link'
           = link_to '-1', rating_down_question_path(question), method: :patch, remote: true, class: 'rating-link'

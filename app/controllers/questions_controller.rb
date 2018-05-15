@@ -27,16 +27,12 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    if current_user.author_of?(@question)
-      render :edit
-    end
+    render :edit
   end
 
   def update
-    if current_user.author_of?(@question)
-      @question.update(questions_params)
-      respond_with @question
-    end
+    @question.update(questions_params)
+    respond_with @question
   end
 
   def destroy

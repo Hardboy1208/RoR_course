@@ -24,9 +24,17 @@ class Ability
     guest_abilities
     can :create, [Question, Answer, Comment]
     can :update, [Question, Answer, Comment], user_id: user.id
-    can :destroy, [Question, Answer, Comment], user_id: user.id
-    can :rating_up, [Question, Answer]
-    can :rating_down, [Question, Answer]
-    can :rating_reset, [Question, Answer]
+    can :destroy, [Question, Answer], user_id: user.id
+    can :destroy, Attachment, attachmentable: { user: user }
+    can :rating_up, [Question, Answer] do |obj|
+      !user.author_of?(obj)
+    end
+    can :rating_down, [Question, Answer] do |obj|
+      !user.author_of?(obj)
+    end
+    can :rating_reset, [Question, Answer] do |obj|
+      !user.author_of?(obj)
+    end
+    can :choose_the_best, [Question, Answer]
   end
 end

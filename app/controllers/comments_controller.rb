@@ -2,6 +2,8 @@ class CommentsController < ApplicationController
   before_action :load_commentable, only: [:create]
   after_action :publish_comment, only: [:create]
 
+  authorize_resource
+
   def create
     @comment = @commentable.comments.new(comments_params.merge({ user_id: current_user.id }))
     @comment.save

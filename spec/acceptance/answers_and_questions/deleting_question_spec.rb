@@ -30,7 +30,9 @@ feature 'Delete question', %q{
     question
     sign_in(user)
     visit question_path(question)
-    expect(page).to_not have_content 'Delete'
+    within '.question' do
+      expect(page).to_not have_content 'Delete'
+    end
   end
 
   scenario 'Non-authenticated delete question' do
