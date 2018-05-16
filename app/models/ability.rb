@@ -26,10 +26,7 @@ class Ability
     can :update, [Question, Answer, Comment], user_id: user.id
     can :destroy, [Question, Answer], user_id: user.id
     can :destroy, Attachment, attachmentable: { user: user }
-    can :rating_up, [Question, Answer] do |obj|
-      !user.author_of?(obj)
-    end
-    can :rating_down, [Question, Answer] do |obj|
+    can [:rating_up, :rating_down], [Question, Answer] do |obj|
       !user.author_of?(obj)
     end
     can :rating_reset, [Question, Answer] do |obj|
