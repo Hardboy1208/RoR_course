@@ -48,6 +48,9 @@ gem 'omniauth-vkontakte'
 gem 'omniauth-twitter'
 gem 'cancancan'
 gem 'doorkeeper', '4.2.6'
+gem 'active_model_serializers'
+gem 'oj'
+gem 'oj_mimic_json'
 
 
 # Use Capistrano for deployment
