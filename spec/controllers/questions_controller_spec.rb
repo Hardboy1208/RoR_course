@@ -101,43 +101,13 @@ describe QuestionsController do
     end
   end
 
-  describe 'PATCH #rating_up' do
+  describe 'rating' do
     sign_in_user
 
-    context 'Author voted for answer' do
-      it 'the number rating of answers' do
-        patch :rating_up, params: { id: question.id, format: :json }
-        question.reload
-        expect(question.diff_like).to eq 1
-      end
-    end
-  end
+    let(:author_question) { create(:question, user: @user) }
+    let(:not_author_object) { question }
+    let(:author_object) { author_question }
 
-  describe 'PATCH #rating_down' do
-    sign_in_user
-
-    context 'Author voted for answer' do
-      it 'the number rating of answers' do
-        patch :rating_down, params: { id: question.id, format: :json }
-        question.reload
-        expect(question.diff_like).to eq -1
-      end
-    end
-  end
-
-  describe 'PATCH #rating_reset' do
-    sign_in_user
-
-    let(:question_with_answer) { create(:question_for_answers, user: user) }
-
-    context 'Author voted for answer' do
-      it 'the number rating of answers' do
-        patch :rating_up, params: { id: question.id, format: :json }
-        question.reload
-        patch :rating_reset, params: { id: question.id, format: :json }
-        question.reload
-        expect(question.diff_like).to eq 0
-      end
-    end
+    it_behaves_like 'Ratingable'
   end
 end
