@@ -1,0 +1,9 @@
+%h4
+  = @greeting
+
+%p= link_to @question.title, question_url(@question)
+%p= @question.body.first(10)
+
+- @answers.each do |answer|
+  %p= answer.body
+

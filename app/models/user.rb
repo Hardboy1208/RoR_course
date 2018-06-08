@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :authorizations
+  has_many :subscriptions, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -32,7 +33,21 @@ class User < ApplicationRecord
     user
   end
 
+  def self.send_daily_digest
+    find_each.each do |user|
+      DailyMailer.digest(user, Question.for_last_day).deliver_later
+    end
+  end
+
   def create_authorization(auth)
     self.authorizations.create(provider: auth.provider, uid: auth.uid)
+  end
+
+  def subscription?(question)
+    self.subscriptions.where(question: question).exists?
+  end
+
+  def question_subscription(question)
+    self.subscriptions.find_by(question: question)
   end
 end

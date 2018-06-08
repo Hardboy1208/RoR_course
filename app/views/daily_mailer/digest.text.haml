@@ -1,0 +1,6 @@
+= @greeting
+
+- @questions.each do |question|
+  = question.title
+  = question.body.first(10)
+  = question_url(question)
