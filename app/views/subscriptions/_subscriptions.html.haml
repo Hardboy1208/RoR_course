@@ -1,0 +1,5 @@
+- if current_user
+  - if current_user.subscription?(question)
+    = link_to 'Отписаться', subscription_path(current_user.question_subscription(question)), method: :delete, remote: true
+  - else
+    = link_to 'Подписаться', question_subscriptions_path(question), method: :post, remote: true

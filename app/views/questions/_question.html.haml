@@ -25,6 +25,10 @@
     .diff_like
       = "(#{question.diff_like})"
 
+  %div{ class: "subscriptions-for-#{question.id}" }
+    = render 'subscriptions/subscriptions', question: question
+
+
   .question-comments
     = render question.comments
   - if can?(:create, Comment)
