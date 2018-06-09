@@ -4,7 +4,7 @@ class Subscription < ApplicationRecord
 
   def self.send_subscription
     find_each.each do |subscription|
-      UserSubscriptionsMailer.send_mail(subscription, subscription.question).deliver_later
+      UserSubscriptionsMailer.send_mail(subscription.user, subscription.question).deliver_later
     end
   end
 end
