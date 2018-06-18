@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: [:destroy]
+  get :search, to: 'searchs#search'
 
   root to: "questions#index"
   mount ActionCable.server => '/cable'

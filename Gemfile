@@ -55,6 +55,8 @@ gem 'whenever'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', require: nil
 gem 'sidetiq'
+gem 'mysql2'
+gem 'thinking-sphinx'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

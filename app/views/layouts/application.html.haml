@@ -15,4 +15,8 @@
     - if user_signed_in?
       %li
         = link_to('Log out', destroy_user_session_path, method: :delete)
+    .search
+      = render 'shared/search'
+
     = yield
+
