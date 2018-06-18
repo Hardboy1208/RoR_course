@@ -22,3 +22,5 @@ config/database.yml
 /.idea
 /Gemfile.lock
 /public/uploads
+/config/*.sphinx.conf
+/db/sphinx

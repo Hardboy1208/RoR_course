@@ -1,0 +1,5 @@
+- @search_list.each do |search_item|
+  = search_item.class.name
+  = search_item.title if search_item.class.name == "Question"
+  = search_item.body
+  %hr
