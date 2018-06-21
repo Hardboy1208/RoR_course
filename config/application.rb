@@ -31,4 +31,6 @@ module RorCourse
       g.fixture_replacement :factory_bot, dir: 'spec/factories'
     end
   end
+
+  Dotenv.load *Dir.glob(Rails.root.join("config/**/*.env"), File::FNM_DOTMATCH)
 end
